@@ -1,5 +1,27 @@
 #include "stdafx.h"
 
+struct Args
+{
+	std::string inputFileName;
+	std::string outputFileName;
+	std::string search;
+	std::string replace;
+};
+
+std::optional<Args> ParseArgs(int argc, char* argv[])
+{
+	if (argc != 5)
+	{
+		return std::nullopt;
+	}
+	Args args;
+	args.inputFileName = argv[1];
+	args.outputFileName = argv[2];
+	args.search = argv[3];
+	args.replace = argv[4];
+	return args;
+}
+
 // Возвращает результат замены всех вхождения строки searchString внутри строки subject на replacementString
 // Если строка searchString пустая, то возвращается subject
 std::string ReplaceString(const std::string& subject,
@@ -15,17 +37,12 @@ std::string ReplaceString(const std::string& subject,
 	{
 		while (pos < subject.length())
 		{
-			// Находим позицию искомой строки, начиная с pos
 			size_t foundPos = subject.find(searchString, pos);
 
-			// Если не нашли текст для замены - выходим из цикла и записываем остатки subject
 			if (foundPos == std::string::npos)
 				break;
 
-			// В результирующую строку записываем текст из диапазона [pos,foundPos)
 			result.append(subject, pos, foundPos - pos);
-
-			// В результирующую строку записываем текст для замены
 			result.append(replacementString);
 
 			// Пропускаем найденную подстроку
@@ -39,19 +56,19 @@ std::string ReplaceString(const std::string& subject,
 	return result;
 }
 
-void CopyStreamWithReplacement(std::istream& input, std::ostream& output,
-	const std::string& searchString, const std::string& replacementString)
+void CopyWithReplacement(std::istream& input, std::ostream& output,
+	const std::string& search, const std::string& replace)
 {
 	std::string line;
 
 	while (std::getline(input, line))
 	{
-		output << ReplaceString(line, searchString, replacementString) << "\n";
+		output << ReplaceString(line, search, replace) << "\n";
 	}
 }
 
-void CopyFileWithReplacement(const char* inputFileName, const char* outputFileName,
-	const char* searchString, const char* replacementString)
+void CopyWithReplacement(const std::string& inputFileName, const std::string& outputFileName,
+	const std::string& search, const std::string& replace)
 {
 	std::ifstream inputFile;
 	inputFile.open(inputFileName);
@@ -67,10 +84,7 @@ void CopyFileWithReplacement(const char* inputFileName, const char* outputFileNa
 		throw std::runtime_error("Error opening output file!");
 	}
 
-	std::string search = searchString;
-	std::string replace = replacementString;
-
-	CopyStreamWithReplacement(inputFile, outputFile, search, replace);
+	CopyWithReplacement(inputFile, outputFile, search, replace);
 
 	if (inputFile.bad())
 	{
@@ -85,7 +99,8 @@ void CopyFileWithReplacement(const char* inputFileName, const char* outputFileNa
 
 int main(int argc, char* argv[])
 {
-	if (argc != 5)
+	auto args = ParseArgs(argc, argv);
+	if (!args)
 	{
 		std::cout << "Invalid argument count\n"
 				  << "Usage: replace.exe <inputFile> <outputFile> <searchString> <replacementString>\n";
@@ -94,7 +109,7 @@ int main(int argc, char* argv[])
 
 	try
 	{
-		CopyFileWithReplacement(argv[1], argv[2], argv[3], argv[4]);
+		CopyWithReplacement(args->inputFileName, args->outputFileName, args->search, args->replace);
 	}
 	catch (const std::exception& exception)
 	{
