@@ -38,5 +38,9 @@
   <ItemGroup>
     <Text Include="test-data\fox.txt" />
     <Text Include="test-data\fox-replace-dog-with-cat.txt" />
+    <Text Include="input.txt" />
+    <Text Include="output.txt" />
+    <Text Include="test-data\digits.txt" />
+    <Text Include="test-data\digits-replace-1231234-with-0.txt" />
   </ItemGroup>
 </Project>
