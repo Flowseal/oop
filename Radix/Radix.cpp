@@ -34,8 +34,8 @@ std::optional<Args> ParseArgs(int argc, char* argv[])
 	if (argc != 4)
 	{
 		throw std::invalid_argument(
-			"Invalid argument count\n"
-			"Usage: radix.exe <source notation> <destination notation> <value>"
+			"Invalid arguments count\n"
+			"Usage: Radix.exe <source notation> <destination notation> <value>"
 		);
 	}
 
