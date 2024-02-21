@@ -1,136 +1,59 @@
 #include "stdafx.h"
+#include "RadixFunctions.h"
 
-std::string IntToString(int n, int radix, bool& wasError)
+struct Args
 {
-	static const char alphabet[] = "0123456789ABCDEFGHIJKLMNOPRSTUVWXYZ";
-	std::string result;
-	int reminder;
+	int sourceNotation;
+	int destinationNotation;
+	std::string value;
+};
 
-	while (n)
-	{
-		reminder = n % radix;
-		n /= radix;
-		
-		if (reminder >= radix)
-		{
-			wasError = true;
-		}
-
-		result = alphabet[reminder] + result;
-	}
-
-	return result;
-}
-
-int StringToInt(const std::string& str, int radix, bool& wasError)
+int ConvertArgNotationToInt(const std::string& notation)
 {
-	int result = 0;
-	const char* char_array = str.c_str();
+	int numNotation = 0;
 
-	for (size_t i = 0; i < str.length(); i++)
-	{
-		// Индекс символа с конца
-		int back_index = str.length() - 1 - i;
-
-		// Переводим символ std::string в char и получаем его номер в системе кодировки
-		char ch = char_array[i];
-		int ch_code = int(ch);
-		int ch_value;
-
-		if (ch_code >= '0' && ch_code <= '9')
-		{
-			ch_value = (ch_code - '0') * std::pow(radix, back_index);
-		}
-		else if (ch_code >= 'A' && ch_code <= 'Z')
-		{
-			ch_value = (ch_code - 'A' + 10) * std::pow(radix, back_index);
-		}
-		else
-		{
-			wasError = true;
-			return 0;
-		}
-
-		if (ch_value > radix)
-		{
-			wasError = true;
-			return 0;
-		}
-		result += ch_value;
-	}
-
-	return result;
-}
-
-void ConvertArgumentNotationsToInt(int& sourceNotation, int& destinationNotation,
-	const std::string& rawSourceNotation, const std::string& rawDestinationNotation)
-{
 	try
 	{
-		sourceNotation = std::stoi(rawSourceNotation);
-		destinationNotation = std::stoi(rawDestinationNotation);
+		numNotation = std::stoi(notation);
 	}
 	catch (...)
 	{
 		throw std::runtime_error("Error on reading notation argument");
 	}
 
-	if (sourceNotation < 2 || sourceNotation > 36)
+	if (numNotation < 2 || numNotation > 36)
 	{
-		throw std::runtime_error("Error: sourceNotation must be in [2; 36]");
+		throw std::runtime_error("Error: notation must be in [2; 36]");
 	}
-	if (destinationNotation < 2 || destinationNotation > 36)
-	{
-		throw std::runtime_error("Error: destinationNotation must be in [2; 36]");
-	}
+
+	return numNotation;
 }
 
-void ConvertNumberToRadix(const std::string& rawSourceNotation,
-	const std::string& rawDestinationNotation, const std::string& value)
+std::optional<Args> ParseArgs(int argc, char* argv[])
 {
-	int sourceNotation, destinationNotation;
-	ConvertArgumentNotationsToInt(sourceNotation, destinationNotation,
-		rawSourceNotation, rawDestinationNotation);
-
-	if (value.length() == 0)
+	if (argc != 4)
 	{
-		throw std::runtime_error("Error on reading value argument");
+		throw std::invalid_argument(
+			"Invalid argument count\n"
+			"Usage: radix.exe <source notation> <destination notation> <value>"
+		);
 	}
 
-	bool wasError = false;
-	bool hasMinus = value[0] == '-';
+	Args args;
+	args.sourceNotation = ConvertArgNotationToInt(argv[1]);
+	args.destinationNotation = ConvertArgNotationToInt(argv[2]);
+	args.value = argv[3];
 
-	int decimalValue = StringToInt(hasMinus ? value.substr(1) : value, sourceNotation, wasError);
-	if (wasError)
-	{
-		throw std::runtime_error("Error on converting value to decimal system");
-	}
-
-	std::string result = IntToString(decimalValue, destinationNotation, wasError);
-	if (wasError)
-	{
-		throw std::runtime_error("Error on converting decimal value to destination notation");
-	}
-
-	if (hasMinus)
-	{
-		result = "-" + result;
-	}
-	std::cout << result << std::endl;
+	return args;
 }
 
 int main(int argc, char* argv[])
 {
-	if (argc != 4)
-	{
-		std::cout << "Invalid argument count\n"
-				  << "Usage: radix.exe <source notation> <destination notation> <value>\n";
-		return 1;
-	}
-
 	try
 	{
-		ConvertNumberToRadix(argv[1], argv[2], argv[3]);
+		auto args = ParseArgs(argc, argv);
+		std::string result = ConvertToRadix(args->sourceNotation, args->destinationNotation, args->value);
+		std::cout << result << std::endl;
 	}
 	catch (const std::exception& exception)
 	{
