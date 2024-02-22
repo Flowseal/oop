@@ -62,6 +62,11 @@ float FindMinor(float** matrix, int row, int col)
 void InvertMatrix(float** matrix)
 {
 	float determinant = FindDeterminant(matrix);
+	if (determinant == 0)
+	{
+		throw std::runtime_error("Determinant is 0, can't calculate inverted matrix!");
+	}
+
 	float transponatedMinorsMatrix[3][3];
 
 	// Находим миноры для исходной матрицы и сразу же транспонируем их
@@ -70,12 +75,13 @@ void InvertMatrix(float** matrix)
 			transponatedMinorsMatrix[j][i] = FindMinor(matrix, i, j);
 
 	// Записываем результаты инвертирования матрицы заместо исходной матрицы
+	// TODO: проверека на выход за max float
 	for (int i = 0; i < 3; i++)
 		for (int j = 0; j < 3; j++)
 			matrix[i][j] = roundf(transponatedMinorsMatrix[i][j] / determinant * 1000) / 1000;
 }
 
-void InvertMatrix(const std::string& inputFileName)
+float** GetMatrixFromFile(const std::string& inputFileName)
 {
 	std::ifstream inputFile;
 	inputFile.open(inputFileName);
@@ -90,9 +96,8 @@ void InvertMatrix(const std::string& inputFileName)
 	{
 		matrix[i] = new float[3];
 		for (int j = 0; j < 3; j++)
-		{
-			inputFile >> matrix[i][j];
-		}
+			if (!(inputFile >> matrix[i][j]))
+				throw std::runtime_error("Unable to read input file, no more values left. Matrix must be 3x3!");
 	}
 
 	if (inputFile.bad())
@@ -102,10 +107,15 @@ void InvertMatrix(const std::string& inputFileName)
 
 	if (!inputFile.eof())
 	{
-		throw std::runtime_error("Input matrix should be 3x3! Make sure there is no empty line at the end");
+		throw std::runtime_error("Input matrix must be 3x3! Make sure there is no empty line at the end");
 	}
 
-	InvertMatrix(matrix);
+	return matrix;
+}
+
+void OutputMatrix(float** matrix)
+{
+	std::cout << std::fixed << std::setprecision(3);
 
 	for (int i = 0; i < 3; i++)
 	{
@@ -125,7 +135,9 @@ int main(int argc, char* argv[])
 	try
 	{
 		auto args = ParseArgs(argc, argv);
-		InvertMatrix(args->inputFileName);
+		float** matrix = GetMatrixFromFile(args->inputFileName);
+		InvertMatrix(matrix);
+		OutputMatrix(matrix);
 	}
 	catch (const std::exception& exception)
 	{

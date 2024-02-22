@@ -12,19 +12,15 @@ std::string IntToString(int n, int radix, bool& wasError)
 		reminder = n % radix;
 		n /= radix;
 
-		if (reminder >= radix)
-		{
-			wasError = true;
-		}
-
 		result = alphabet[reminder] + result;
 	}
 
 	return result;
 }
 
-int StringToInt(const std::string& str, int radix, bool& wasError)
+int StringToInt(const std::string& str, int radix, bool& wasError, const bool negative)
 {
+	// TODO: проверка за выход инта
 	if (str.empty())
 	{
 		wasError = true;
@@ -35,9 +31,6 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 
 	for (size_t i = 0; i < str.length(); i++)
 	{
-		// Индекс символа с конца, который будем исп. в качестве степени системы счисления
-		int back_index = str.length() - 1 - i;
-
 		char ch = str[i];
 		int ch_value;
 
@@ -61,7 +54,13 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 			return 0;
 		}
 
-		result += ch_value * std::pow(radix, back_index);
+		if (result > (INT_MAX - ch_value + (negative ? 1 : 0)) / radix)
+		{
+			wasError = true;
+			return 0;
+		}
+
+		result = result * radix + ch_value;
 	}
 
 	return result;
@@ -73,7 +72,7 @@ std::string ConvertToRadix(const int sourceNotation, const int destinationNotati
 	bool isNegative = value[0] == '-';
 
 	// Конвертируем value в int в десятичной системе
-	int decimalValue = StringToInt(isNegative ? value.substr(1) : value, sourceNotation, wasError);
+	int decimalValue = StringToInt(isNegative ? value.substr(1) : value, sourceNotation, wasError, isNegative);
 	if (wasError)
 	{
 		throw std::runtime_error("Error on converting value to decimal system");
