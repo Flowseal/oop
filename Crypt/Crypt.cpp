@@ -52,7 +52,7 @@ void Decrypt(std::istream& input, std::ostream& output, int key)
 	char ch;
 	while (input.get(ch))
 	{
-		output << char(ShuffleByte(ch) ^ key);
+		output.put(char(ShuffleByte(ch) ^ key));
 	}
 }
 
@@ -61,7 +61,7 @@ void Crypt(std::istream& input, std::ostream& output, int key)
 	char ch;
 	while (input.get(ch))
 	{
-		output << ShuffleByte(ch ^ key);
+		output.put(ShuffleByte(ch ^ key));
 	}
 }
 
@@ -74,7 +74,7 @@ void FileCipher(const std::string& operation, const std::string& inputFileName,
 		throw std::runtime_error("Error opening input file!");
 	}
 
-	std::ofstream outputFile(outputFileName);
+	std::ofstream outputFile(outputFileName, std::ios_base::binary);
 	if (!outputFile.is_open())
 	{
 		throw std::runtime_error("Error opening output file!");

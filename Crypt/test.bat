@@ -28,7 +28,7 @@ echo Test6.1 passed
 
 rem Проверка, дешифрует ли decrypt файл
 %PROGRAM% decrypt "%TEMP%\output_crypted_255.txt" "%TEMP%\output_decrypted_255.txt" 255 > nul || goto err
-fc.exe "%TEMP%\output_decrypted_255.txt" test-data\hello-world.txt || goto err
+fc.exe "%TEMP%\output_decrypted_255.txt" test-data\hello-world.txt > nul || goto err
 echo Test6.2 passed
 
 rem Проверка, шифрует ли crypt файл по-другому с другим ключом
