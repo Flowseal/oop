@@ -6,7 +6,7 @@ std::string IntToString(int n, int radix)
 	static const char alphabet[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	bool negative = n < 0;
 
-	std::string result;
+	std::string result = n ? "" : "0";
 	int reminder;
 
 	while (n)
@@ -27,7 +27,7 @@ int StringToInt(const std::string& str, int radix, bool& wasError)
 {
 	bool isNegative = !str.empty() && str[0] == '-';
 
-	if (str.length() == isNegative)
+	if (str.length() == int(isNegative))
 	{
 		wasError = true;
 		return 0;

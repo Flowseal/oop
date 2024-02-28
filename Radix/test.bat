@@ -59,8 +59,20 @@ rem -ZIK0ZL (INT_MIN-1) приведёт к underflow: ожидается НЕн
 %PROGRAM% 36 10 -ZIK0ZL > nul && goto err
 echo Test13 passed
 
-rem TODO добавить тест на sourceNotation==destintaitonNotation
-rem TODO добавить тест на мин/макс int
+rem Одинаковые СИ: ожидается нулевой код возврата
+%PROGRAM% 10 10 59 > "%TEMP%\output.txt" || goto err
+fc.exe "%TEMP%\output.txt" test-data\10-10-59.txt >nul || goto err
+echo Test14 passed
+
+rem Ноль в разных СИ: ожидается нулевой код возврата
+%PROGRAM% 16 10 0 > "%TEMP%\output.txt" || goto err
+fc.exe "%TEMP%\output.txt" test-data\16-10-0.txt >nul || goto err
+echo Test15 passed
+
+rem -Ноль в раных СИ: ожидается нулевой код возврата
+%PROGRAM% 16 10 -0 > "%TEMP%\output.txt" || goto err
+fc.exe "%TEMP%\output.txt" test-data\16-10--0.txt >nul || goto err
+echo Test16 passed
 
 echo All tests passed!
 exit 0
