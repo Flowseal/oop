@@ -1,27 +1,33 @@
-#include "RadixFunctions.h"
 #include "stdafx.h"
+#include "RadixFunctions.h"
 
-std::string IntToString(int n, int radix, bool& wasError)
+std::string IntToString(int n, int radix)
 {
 	static const char alphabet[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	bool negative = n < 0;
+
 	std::string result;
 	int reminder;
 
 	while (n)
 	{
-		reminder = n % radix;
+		reminder = abs(n % radix);
 		n /= radix;
 
 		result = alphabet[reminder] + result;
 	}
 
+	if (negative)
+		result.insert(0, "-");
+
 	return result;
 }
 
-int StringToInt(const std::string& str, int radix, bool& wasError, const bool negative)
+int StringToInt(const std::string& str, int radix, bool& wasError)
 {
-	// TODO: проверка за выход инта
-	if (str.empty())
+	bool isNegative = !str.empty() && str[0] == '-';
+
+	if (str.length() == isNegative)
 	{
 		wasError = true;
 		return 0;
@@ -29,10 +35,10 @@ int StringToInt(const std::string& str, int radix, bool& wasError, const bool ne
 
 	int result = 0;
 
-	for (size_t i = 0; i < str.length(); i++)
+	for (size_t i = isNegative; i < str.length(); i++)
 	{
 		char ch = str[i];
-		int ch_value;
+		int ch_value = -1;
 
 		if (ch >= '0' && ch <= '9')
 		{
@@ -42,19 +48,19 @@ int StringToInt(const std::string& str, int radix, bool& wasError, const bool ne
 		{
 			ch_value = (ch - 'A' + 10);
 		}
-		else
+
+		if (ch_value >= radix || ch_value == -1)
 		{
 			wasError = true;
 			return 0;
 		}
 
-		if (ch_value >= radix)
-		{
-			wasError = true;
-			return 0;
-		}
+		if (isNegative)
+			ch_value *= -1;
 
-		if (result > (INT_MAX - ch_value + (negative ? 1 : 0)) / radix)
+		// Overflow и Underflow проверка
+		if (!isNegative && result > (INT_MAX - ch_value) / radix
+			|| isNegative && result < (INT_MIN - ch_value) / radix)
 		{
 			wasError = true;
 			return 0;
@@ -69,25 +75,20 @@ int StringToInt(const std::string& str, int radix, bool& wasError, const bool ne
 std::string ConvertToRadix(const int sourceNotation, const int destinationNotation, const std::string& value)
 {
 	bool wasError = false;
-	bool isNegative = value[0] == '-';
 
 	// Конвертируем value в int в десятичной системе
-	int decimalValue = StringToInt(isNegative ? value.substr(1) : value, sourceNotation, wasError, isNegative);
+	int decimalValue = StringToInt(value, sourceNotation, wasError);
 	if (wasError)
 	{
 		throw std::runtime_error("Error on converting value to decimal system");
 	}
 
-	// Ковертируем 
-	std::string result = IntToString(decimalValue, destinationNotation, wasError);
+	// Ковертируем
+	std::string result = IntToString(decimalValue, destinationNotation);
 	if (wasError)
 	{
 		throw std::runtime_error("Error on converting decimal value to destination notation");
 	}
 
-	if (isNegative)
-	{
-		result.insert(0, "-");
-	}
 	return result;
 }

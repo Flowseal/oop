@@ -41,21 +41,21 @@ rem При запуске с правильными параметрами ож�
 fc.exe "%TEMP%\output.txt" test-data\5-13-1234.txt >nul || goto err
 echo Test9 passed
 
-rem ZIK0ZJ (MAX_INT) не приведёт к overflow: ожидается нулевой код возврата
+rem ZIK0ZJ (INT_MAX) не приведёт к overflow: ожидается нулевой код возврата
 %PROGRAM% 36 10 ZIK0ZJ > "%TEMP%\output.txt" || goto err
 fc.exe "%TEMP%\output.txt" test-data\36-10-ZIK0ZJ.txt >nul || goto err
 echo Test10 passed
 
-rem ZIK0ZK (MAX_INT+1) приведёт к overflow: ожидается НЕнулевой код возврата
+rem ZIK0ZK (INT_MAX+1) приведёт к overflow: ожидается НЕнулевой код возврата
 %PROGRAM% 36 10 ZIK0ZK > nul && goto err
 echo Test11 passed
 
-rem -ZIK0ZK (MIN_INT) не приведёт к underflow: ожидается нулевой код возврата
+rem -ZIK0ZK (INT_MIN) не приведёт к underflow: ожидается нулевой код возврата
 %PROGRAM% 36 10 -ZIK0ZK > "%TEMP%\output.txt" || goto err
 fc.exe "%TEMP%\output.txt" test-data\36-10--ZIK0ZK.txt >nul || goto err
 echo Test12 passed
 
-rem -ZIK0ZL (MIN_INT-1) приведёт к underflow: ожидается НЕнулевой код возврата
+rem -ZIK0ZL (INT_MIN-1) приведёт к underflow: ожидается НЕнулевой код возврата
 %PROGRAM% 36 10 -ZIK0ZL > nul && goto err
 echo Test13 passed
 
