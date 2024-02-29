@@ -68,6 +68,7 @@ void Crypt(std::istream& input, std::ostream& output, int key)
 void FileCipher(const std::string& operation, const std::string& inputFileName,
 	const std::string& outputFileName, int key)
 {
+	// TODO вынести проверку файлов
 	std::ifstream inputFile(inputFileName, std::ios_base::binary);
 	if (!inputFile.is_open())
 	{
