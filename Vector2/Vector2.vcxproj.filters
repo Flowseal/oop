@@ -30,10 +30,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="VectorFunctions.h">
-      <Filter>Source Files</Filter>
+      <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="input.txt" />
   </ItemGroup>
 </Project>

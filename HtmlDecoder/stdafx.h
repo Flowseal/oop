@@ -2,5 +2,5 @@
 
 #include <iostream>
 #include <string>
-#include <functional>
+#include <algorithm>
 #include <unordered_map>
