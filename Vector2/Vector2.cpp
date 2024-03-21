@@ -6,6 +6,7 @@ int main(int argc, char* argv[])
 	{
 		std::vector<double> numbers = ReadNumbersFromStream(std::cin);
 		MultiplyVectorOnMin(numbers);
+		std::sort(numbers.begin(), numbers.end());
 		OutputVectorToStream(numbers, std::cout);
 	}
 	catch (const std::exception& exception)

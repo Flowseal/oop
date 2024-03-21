@@ -8,16 +8,6 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="test-data">
-      <UniqueIdentifier>{b956030e-96f1-4338-81cb-f7194fa8e4c8}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="test-data\empty.txt">
-      <Filter>test-data</Filter>
-    </Text>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
 </Project>
