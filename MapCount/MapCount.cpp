@@ -5,6 +5,7 @@ int main()
 	try
 	{
 		std::unordered_map<std::string, int> map;
+
 	}
 	catch (const std::exception& exception)
 	{
