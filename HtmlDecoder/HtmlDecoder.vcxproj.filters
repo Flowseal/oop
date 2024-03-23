@@ -29,7 +29,7 @@
     <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="HtmlFucntions.h">
+    <ClInclude Include="HtmlFunctions.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

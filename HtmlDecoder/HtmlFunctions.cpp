@@ -1,4 +1,4 @@
-#include "HtmlFucntions.h"
+#include "HtmlFunctions.h"
 
 std::unordered_map<std::string, std::string> html_codes{
 	{ "&quot;", "\"" },
@@ -21,7 +21,7 @@ std::string HtmlDecode(std::string const& html)
 		auto it = html_codes.begin();
 		for (; it != html_codes.end(); it++)
 		{
-			if (html.substr(amp_pos, amp_pos + it->first.length()) == it->first)
+			if (html.substr(amp_pos, it->first.length()) == it->first)
 			{
 				decoded_html.append(it->second);
 				pos = amp_pos + it->first.length();

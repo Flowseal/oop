@@ -1,6 +1,9 @@
-#include "HtmlFucntions.h"
+#include "HtmlFunctions.h"
 
 int main()
 {
-	std::cout << HtmlDecode("&amp;testing");
+	std::string inputString;
+	std::getline(std::cin, inputString);
+
+	std::cout << HtmlDecode(inputString);
 }
