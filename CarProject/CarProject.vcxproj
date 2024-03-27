@@ -130,10 +130,12 @@
     <ClCompile Include="Car.cpp" />
     <ClCompile Include="CarProject.cpp" />
     <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Transimission.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Car.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Transmission.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
