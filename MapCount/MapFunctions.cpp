@@ -2,14 +2,8 @@
 
 void AddWord(std::unordered_map<std::string, int>& map, const std::string& word)
 {
-	std::string word_lowercase = word;
-	std::transform(word_lowercase.begin(), word_lowercase.end(), word_lowercase.begin(),
-		[](unsigned char c) { 
-			return std::tolower(c); 
-		});
-
-	map.try_emplace(word_lowercase, 0);
-	auto it = map.find(word_lowercase);
+	map.try_emplace(word, 0);
+	auto it = map.find(word);
 	it->second += 1;
 }
 

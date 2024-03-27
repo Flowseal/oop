@@ -8,9 +8,9 @@ int main()
 
 	try
 	{
-		std::unordered_map<std::string, int> map;
-		AddWordsFromStream(map, std::cin);
-		PrintWordsCount(map, std::cout);
+		std::unordered_map<std::string, int> countMap;
+		AddWordsFromStream(countMap, std::cin);
+		PrintWordsCount(countMap, std::cout);
 	}
 	catch (const std::exception& exception)
 	{
