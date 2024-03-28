@@ -4,6 +4,9 @@ bool ValidateGearChange(int gear, int nextGear, int speed);
 
 bool Transmission::IsGearSpeedValid(int gear, int speed, const std::map<int, std::pair<int, int>>& gearSpeeds)
 {
+	if (gear == 0 && speed >= 0)
+		return true;
+
 	std::pair<int, int> speedRange = (*gearSpeeds.find(gear)).second;
 
 	if (speed < speedRange.first || speed > speedRange.second)

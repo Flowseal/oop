@@ -31,11 +31,13 @@ bool Car::SetSpeed(int speed)
 	if (speed == m_speed)
 		return true;
 
-	if (speed < 0)
+	if (speed < 0 && m_transimission.GetGear() >= 0)
 	{
-		std::cout << "Speed can't be negatvie value" << std::endl;
+		std::cout << "Speed is not in the gear's range" << std::endl;
 		return false;
 	}
+
+	speed = abs(speed);
 
 	if (!Transmission::IsGearSpeedValid(m_transimission.GetGear(), speed, m_gearSpeeds))
 	{
