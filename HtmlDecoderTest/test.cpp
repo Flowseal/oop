@@ -72,11 +72,28 @@ TEST(HtmlDecodeTest, MixedHtml)
 
 	EXPECT_EQ(HtmlDecode(html), exp_decoded_html);
 }
-
+// TODO add test &amp;amp;
+// TODO add test if & at the end
 TEST(HtmlDecodeTest, CapsulatedHtmlCode)
 {
 	std::string html = "He said &&quot&quot;&lt;;";
 	std::string exp_decoded_html = "He said &&quot\"<;";
+
+	EXPECT_EQ(HtmlDecode(html), exp_decoded_html);
+}
+
+TEST(HtmlDecodeTest, AmpCodeWithWrongAmpCodeAtEnd)
+{
+	std::string html = "&amp;amp;";
+	std::string exp_decoded_html = "&amp;";
+
+	EXPECT_EQ(HtmlDecode(html), exp_decoded_html);
+}
+
+TEST(HtmlDecodeTest, AmpAtEnd)
+{
+	std::string html = "Hello &";
+	std::string exp_decoded_html = "Hello &";
 
 	EXPECT_EQ(HtmlDecode(html), exp_decoded_html);
 }

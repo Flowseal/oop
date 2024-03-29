@@ -8,7 +8,7 @@ int main()
 
 	try
 	{
-		std::unordered_map<std::string, int> countMap;
+		std::map<std::string, int> countMap;
 		AddWordsFromStream(countMap, std::cin);
 		PrintWordsCount(countMap, std::cout);
 	}

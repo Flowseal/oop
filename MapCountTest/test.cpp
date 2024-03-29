@@ -1,61 +1,78 @@
 ﻿#include "pch.h"
 #include "../MapCount/MapFunctions.cpp"
 
+// TODO change to eng tests
+
 TEST(AddWordsFromStreamTest, Empty)
 {
-	std::unordered_map<std::string, int> countMap;
+	std::map<std::string, int> countMap;
 	std::stringstream ss;
 	AddWordsFromStream(countMap, ss);
 
-	std::unordered_map<std::string, int> expectCountMap;
+	std::map<std::string, int> expectCountMap;
 	EXPECT_EQ(countMap, expectCountMap);
 }
 
 TEST(AddWordsFromStreamTest, NoWords)
 {
-	std::unordered_map<std::string, int> countMap;
+	std::map<std::string, int> countMap;
 	std::stringstream ss;
 	ss << "\t \n   ";
 	AddWordsFromStream(countMap, ss);
 
-	std::unordered_map<std::string, int> expectCountMap;
+	std::map<std::string, int> expectCountMap;
 	EXPECT_EQ(countMap, expectCountMap);
 }
 
 TEST(AddWordsFromStreamTest, SingleWord)
 {
-	std::unordered_map<std::string, int> countMap;
+	std::map<std::string, int> countMap;
 	std::stringstream ss;
 	ss << "Hello";
 	AddWordsFromStream(countMap, ss);
 
-	std::unordered_map<std::string, int> expectCountMap{
+	std::map<std::string, int> expectCountMap{
 		{ "Hello", 1 }
+	};
+	EXPECT_EQ(countMap, expectCountMap);
+}
+
+// TODO add tests to symbols like '(+,..;&*^%
+TEST(AddWordsFromStreamTest, SpecialSymbols)
+{
+	std::map<std::string, int> countMap;
+	std::stringstream ss;
+	ss << "Hello%%. World*&^! ,/@$ ( (";
+	AddWordsFromStream(countMap, ss);
+
+	std::map<std::string, int> expectCountMap{
+		{ "Hello%%.", 1 },
+		{ "World*&^!", 1 },
+		{ ",/@$", 1 },
+		{ "(", 2 }
 	};
 	EXPECT_EQ(countMap, expectCountMap);
 }
 
 TEST(AddWordsFromStreamTest, Mixed)
 {
-	std::unordered_map<std::string, int> countMap;
+	std::map<std::string, int> countMap;
 	std::stringstream ss;
-	ss << "Hello \t World \t Привет \n  Привет  Мир World 1234 5";
+	ss << "Hello \t World \t \n 5 World 1234 5";
 	AddWordsFromStream(countMap, ss);
 
-	std::unordered_map<std::string, int> expectCountMap{
+	std::map<std::string, int> expectCountMap{
 		{ "Hello", 1 },
 		{ "World", 2 },
-		{ "Привет", 2 },
-		{ "Мир", 1 },
+		{ "5", 2 },
 		{ "1234", 1 },
-		{ "5", 1 },
 	};
 	EXPECT_EQ(countMap, expectCountMap);
 }
 
 TEST(PrintWordsCountTest, Empty)
 {
-	std::unordered_map<std::string, int> countMap;
+	std::map<std::string, int> countMap;
 	std::ostringstream output;
 	PrintWordsCount(countMap, output);
 
@@ -65,7 +82,7 @@ TEST(PrintWordsCountTest, Empty)
 
 TEST(PrintWordsCountTest, SingleWord)
 {
-	std::unordered_map<std::string, int> countMap{
+	std::map<std::string, int> countMap{
 		{ "Hello", 1 }
 	};
 	std::ostringstream output;
@@ -78,18 +95,18 @@ TEST(PrintWordsCountTest, SingleWord)
 
 TEST(PrintWordsCountTest, Mixed)
 {
-	std::unordered_map<std::string, int> countMap{
+	std::map<std::string, int> countMap{
+		{ "2024", 1 },
 		{ "Hello", 1 },
-		{ "Мир", 1 },
-		{ "2024", 2 }
+		{ "World$$", 2 },
 	};
 	std::ostringstream output;
 	PrintWordsCount(countMap, output);
 
 	std::ostringstream expectedOutput;
+	expectedOutput << "2024 -> 1" << std::endl;
 	expectedOutput << "Hello -> 1" << std::endl;
-	expectedOutput << "Мир -> 1" << std::endl;
-	expectedOutput << "2024 -> 2" << std::endl;
+	expectedOutput << "World$$ -> 2" << std::endl;
 	EXPECT_EQ(output.str(), expectedOutput.str());
 }
 

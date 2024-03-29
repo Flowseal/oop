@@ -31,9 +31,36 @@ TEST(GeneratePrimeNumbersSetTest, AveragePrimes)
 	EXPECT_EQ(primes.size(), 906);
 }
 
+// TODO check if set equals
+// TODO add test if upperbound not prime
+
+TEST(GeneratePrimeNumbersSetTest, SmallUpperBoundNotPrime)
+{
+	std::set<int> primes = GeneratePrimeNumbersSet(18);
+	std::set<int> expectedPrimes{
+		2, 3, 5, 7, 11, 13, 17
+	};
+	EXPECT_EQ(primes, expectedPrimes);
+}
+
+TEST(GeneratePrimeNumbersSetTest, SmallUpperBoundPrime)
+{
+	std::set<int> primes = GeneratePrimeNumbersSet(19);
+	std::set<int> expectedPrimes{
+		2, 3, 5, 7, 11, 13, 17, 19
+	};
+	EXPECT_EQ(primes, expectedPrimes);
+}
+
 TEST(GeneratePrimeNumbersSetTest, MaxUpperBound)
 {
 	std::set<int> primes = GeneratePrimeNumbersSet(100000000);
+	EXPECT_EQ(primes.size(), 5761455);
+}
+
+TEST(GeneratePrimeNumbersSetTest, UpperBoundIsPrime)
+{
+	std::set<int> primes = GeneratePrimeNumbersSet(99999989);
 	EXPECT_EQ(primes.size(), 5761455);
 }
 

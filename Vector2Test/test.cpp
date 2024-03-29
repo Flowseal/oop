@@ -77,8 +77,19 @@ TEST(OutputVectorTest, NotEmptyVector)
 	std::vector<double> numbers{0.5, -2, 5};
 	OutputVectorToStream(numbers, ss);
 
-	EXPECT_EQ(ss.str(), "0.5 -2 5");
+	EXPECT_EQ(ss.str(), "0.500 -2.000 5.000");
 }
+
+TEST(MultiplyAndOutputTest, PrecisionTest)
+{
+	std::stringstream ss;
+	std::vector<double> numbers{ 0.999,	1.5, 1 };
+	MultiplyVectorOnMin(numbers);
+	OutputVectorToStream(numbers, ss);
+
+	EXPECT_EQ(ss.str(), "0.998 1.498 0.999");
+}
+
 
 GTEST_API_ int main(int argc, char** argv)
 {

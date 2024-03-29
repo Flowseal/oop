@@ -9,9 +9,14 @@ int main(int argc, char* argv[])
 		std::sort(numbers.begin(), numbers.end());
 		OutputVectorToStream(numbers, std::cout);
 	}
-	catch (const std::exception& exception)
+	catch (const std::runtime_error& exception)
 	{
 		std::cout << exception.what() << std::endl;
+		return 1;
+	}
+	catch (const std::exception& exception)
+	{
+		std::cout << "Unexpected error: " << exception.what() << std::endl;
 		return 1;
 	}
 

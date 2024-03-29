@@ -49,6 +49,8 @@ void OutputVectorToStream(const std::vector<double>& numbers, std::ostream& outp
 		return;
 	}
 
+	output << std::fixed << std::showpoint;
+	output << std::setprecision(3);
 	std::copy(numbers.begin(), numbers.end() - 1, std::ostream_iterator<double>(output, " "));
 	output << *(numbers.end() - 1);
 

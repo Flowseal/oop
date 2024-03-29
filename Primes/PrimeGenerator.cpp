@@ -1,12 +1,17 @@
 #include "PrimeGenerator.h"
+const int MAX_UPPER_BOUND = 100000000;
 
 std::set<int> GeneratePrimeNumbersSet(int upperBound)
 {
 	if (upperBound < 2)
 		return std::set<int>{};
 
+	if (upperBound > MAX_UPPER_BOUND)
+		throw std::runtime_error("upperBound is greater than maximum bound (100000000)");
+
 	std::vector<bool> prime(upperBound + 1, true);
-	std::vector<int> result{ 2 };
+	prime[0] = false;
+	prime[1] = false;
 
 	for (int i = 4; i <= upperBound; i += 2)
 	{
@@ -18,7 +23,6 @@ std::set<int> GeneratePrimeNumbersSet(int upperBound)
 	{
 		if (prime[p])
 		{
-			result.push_back(p);
 			for (int i = p * p; i <= upperBound; i += 2 * p)
 			{
 				prime[i] = false;
@@ -26,13 +30,14 @@ std::set<int> GeneratePrimeNumbersSet(int upperBound)
 		}
 	}
 
-	for (; p <= upperBound; p += 2)
+	std::set<int> result;
+	for (int i = 0; i < prime.size(); i++)
 	{
-		if (prime[p])
+		if (prime[i])
 		{
-			result.push_back(p);
+			result.insert(i);
 		}
 	}
 
-	return std::set<int>(result.begin(), result.end());
+	return result;
 }

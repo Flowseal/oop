@@ -1,5 +1,5 @@
 #pragma once
 #include "stdafx.h"
 
-void AddWordsFromStream(std::unordered_map<std::string, int>& map, std::istream& stream);
-void PrintWordsCount(const std::unordered_map<std::string, int>& map, std::ostream& stream);
+void AddWordsFromStream(std::map<std::string, int>& countMap, std::istream& stream);
+void PrintWordsCount(const std::map<std::string, int>& countMap, std::ostream& stream);
